@@ -1,0 +1,38 @@
+name: Deploy IIoT Stack to VPS
+
+# Potok uruchamia się automatycznie przy każdym 'git push' na gałąź 'master' (lub 'main')
+on:
+  push:
+    branches:
+      - master
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-22.04
+
+    steps:
+      # Krok 1: Pobranie najnowszego kodu z GitHuba na maszynę wirtualną GitHub Actions
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      # Krok 2: Połączenie przez SSH z Twoim serwerem VPS i wdrożenie projektu
+      - name: Deploy to VPS via SSH
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.VPS_IP }}          # Adres IP Twojego serwera (ustawiany w GitHub Secrets)
+          username: ${{ secrets.VPS_USER }}    # Nazwa użytkownika, np. root (ustawiana w GitHub Secrets)
+          key: ${{ secrets.VPS_SSH_KEY }}      # Twój prywatny klucz SSH (ustawiany w GitHub Secrets)
+          port: 22
+          script: |
+            # 1. Wejdź do katalogu projektu na serwerze (zmień ścieżkę jeśli będzie inna)
+            cd ~/iiot-smart-factory
+            
+            # 2. Pobierz najnowsze zmiany z repozytorium Git
+            git pull origin master
+            
+            # 3. Zrestartuj i przebuduj kontenery w tle
+            docker-compose down
+            docker-compose up -d --build
+            
+            echo "Deployment completed successfully!"
