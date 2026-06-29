@@ -1,0 +1,21 @@
+# Secrets
+
+
+# Codesys compilation and user settings
+Codesys/*.opt
+Codesys/*.compileinfo
+Codesys/*.bootinfo
+Codesys/*.precompilecache
+Codesys/*.bootinfo_guids
+Codesys/*~u
+Codesys/IiotSmartFactoryPLC-AllUsers.opt
+Codesys/NovaTech_Assembly_Line1-AllUsers.opt
+Codesys/NovaTech_Procejt_PLC's-AllUsers.opt
+
+# Temp & System files
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# Ignition temporary / lock files (if any occur locally)
+ignition/projects/conversion-report.txt

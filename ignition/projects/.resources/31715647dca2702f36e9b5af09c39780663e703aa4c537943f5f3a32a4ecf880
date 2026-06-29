@@ -1,0 +1,325 @@
+{
+  "custom": {},
+  "params": {
+    "Area": "Assembly",
+    "Enterprise": "NovaTech",
+    "NrLine": 1,
+    "NrPLC": 1,
+    "Site": "Warsaw"
+  },
+  "propConfig": {
+    "params.Area": {
+      "paramDirection": "input",
+      "persistent": true
+    },
+    "params.Enterprise": {
+      "paramDirection": "input",
+      "persistent": true
+    },
+    "params.NrLine": {
+      "paramDirection": "input",
+      "persistent": true
+    },
+    "params.NrPLC": {
+      "paramDirection": "input",
+      "persistent": true
+    },
+    "params.Site": {
+      "paramDirection": "input",
+      "persistent": true
+    }
+  },
+  "props": {
+    "defaultSize": {
+      "height": 220,
+      "width": 320
+    }
+  },
+  "root": {
+    "children": [
+      {
+        "meta": {
+          "name": "Title"
+        },
+        "position": {
+          "basis": "32px"
+        },
+        "propConfig": {
+          "props.text": {
+            "binding": {
+              "config": {
+                "expression": "concat(\"LINE \", {view.params.NrLine}, \" - PLC \", {view.params.NrPLC})"
+              },
+              "type": "expr"
+            }
+          }
+        },
+        "props": {
+          "style": {
+            "color": "#f8fafc",
+            "fontSize": "20px",
+            "fontWeight": "bold",
+            "marginBottom": "16px"
+          }
+        },
+        "type": "ia.display.label"
+      },
+      {
+        "events": {
+          "component": {
+            "onActionPerformed": {
+              "config": {
+                "name": "dark"
+              },
+              "scope": "C",
+              "type": "theme"
+            }
+          }
+        },
+        "meta": {
+          "name": "CounterPart"
+        },
+        "position": {
+          "basis": "32px"
+        },
+        "propConfig": {
+          "props.text": {
+            "binding": {
+              "config": {
+                "expression": "concat(\"Part Counter: \", tag(concat(\r\n    \"[MQTT Engine]\", \r\n    {view.params.Enterprise}, \"/\", \r\n    {view.params.Site}, \"/\", \r\n    {view.params.Area}, \"/Line\", \r\n    {view.params.NrLine}, \"/PLC\", \r\n    {view.params.NrPLC}, \"/Status/PartCounter\"\r\n)))"
+              },
+              "type": "expr"
+            }
+          }
+        },
+        "props": {
+          "style": {
+            "color": "#f8fafc",
+            "fontSize": "20px",
+            "fontWeight": "bold",
+            "marginBottom": "16px"
+          }
+        },
+        "type": "ia.display.label"
+      },
+      {
+        "events": {
+          "component": {
+            "onActionPerformed": {
+              "config": {
+                "name": "dark"
+              },
+              "scope": "C",
+              "type": "theme"
+            }
+          }
+        },
+        "meta": {
+          "name": "TxtCycleTime"
+        },
+        "position": {
+          "basis": "32px"
+        },
+        "propConfig": {
+          "props.text": {
+            "binding": {
+              "config": {
+                "expression": "concat(\"Cycle Time: \", tag(concat(\r\n    \"[MQTT Engine]\", \r\n    {view.params.Enterprise}, \"/\", \r\n    {view.params.Site}, \"/\", \r\n    {view.params.Area}, \"/Line\", \r\n    {view.params.NrLine}, \"/PLC\", \r\n    {view.params.NrPLC}, \"/Status/CycleTime\"\r\n)))"
+              },
+              "type": "expr"
+            }
+          }
+        },
+        "props": {
+          "style": {
+            "color": "#f8fafc",
+            "fontSize": "20px",
+            "fontWeight": "bold",
+            "marginBottom": "16px"
+          }
+        },
+        "type": "ia.display.label"
+      },
+      {
+        "events": {
+          "component": {
+            "onActionPerformed": {
+              "config": {
+                "name": "dark"
+              },
+              "scope": "C",
+              "type": "theme"
+            }
+          }
+        },
+        "meta": {
+          "name": "TxtSafetyStatus"
+        },
+        "position": {
+          "basis": "32px"
+        },
+        "propConfig": {
+          "props.style.color": {
+            "binding": {
+              "config": {
+                "expression": "if(tag(concat(\"[MQTT Engine]\", {view.params.Enterprise}, \"/\", {view.params.Site}, \"/\", {view.params.Area}, \"/Line\", {view.params.NrLine}, \"/PLC\", {view.params.NrPLC}, \"/Status/SafetyOK\")), \"#22c55e\", \"#ef4444\")"
+              },
+              "type": "expr"
+            }
+          },
+          "props.text": {
+            "binding": {
+              "config": {
+                "expression": "if(tag(concat(\"[MQTT Engine]\", {view.params.Enterprise}, \"/\", {view.params.Site}, \"/\", {view.params.Area}, \"/Line\", {view.params.NrLine}, \"/PLC\", {view.params.NrPLC}, \"/Status/SafetyOK\")), \"SAFETY OK\", \"SAFETY FAULT\")"
+              },
+              "type": "expr"
+            }
+          }
+        },
+        "props": {
+          "style": {
+            "fontSize": "20px",
+            "fontWeight": "bold",
+            "marginBottom": "16px"
+          }
+        },
+        "type": "ia.display.label"
+      },
+      {
+        "events": {
+          "component": {
+            "onActionPerformed": {
+              "config": {
+                "name": "dark"
+              },
+              "scope": "C",
+              "type": "theme"
+            }
+          }
+        },
+        "meta": {
+          "name": "TxtStatusPLC"
+        },
+        "position": {
+          "basis": "32px"
+        },
+        "propConfig": {
+          "props.style.color": {
+            "binding": {
+              "config": {
+                "expression": "if(tag(concat(\"[MQTT Engine]\", {view.params.Enterprise}, \"/\", {view.params.Site}, \"/\", {view.params.Area}, \"/Line\", {view.params.NrLine}, \"/PLC\", {view.params.NrPLC}, \"/Status/State\")) \u003d 1, \"#22c55e\", \"#94a3b8\")"
+              },
+              "type": "expr"
+            }
+          },
+          "props.text": {
+            "binding": {
+              "config": {
+                "expression": "if(tag(concat(\"[MQTT Engine]\", {view.params.Enterprise}, \"/\", {view.params.Site}, \"/\", {view.params.Area}, \"/Line\", {view.params.NrLine}, \"/PLC\", {view.params.NrPLC}, \"/Status/State\")) \u003d 1, \"STATUS: RUNNING\", \"STATUS: IDLE\")"
+              },
+              "type": "expr"
+            }
+          }
+        },
+        "props": {
+          "style": {
+            "fontSize": "20px",
+            "fontWeight": "bold",
+            "marginBottom": "16px"
+          }
+        },
+        "type": "ia.display.label"
+      },
+      {
+        "children": [
+          {
+            "events": {
+              "component": {
+                "onActionPerformed": {
+                  "config": {
+                    "script": "\t# Pobranie parametrów z widoku\n\tenterprise \u003d self.view.params.Enterprise\n\tsite \u003d self.view.params.Site\n\tarea \u003d self.view.params.Area\n\tline \u003d self.view.params.NrLine\n\tplc \u003d self.view.params.NrPLC\n\t\t\t\n\t# Dynamiczne złożenie ścieżki tematu: NovaTech/Warsaw/Assembly/Line1/PLC1/Cmd\n\ttopic \u003d \"{}/{}/{}/Line{}/PLC{}/Cmd\".format(enterprise, site, area, line, plc)\n\tpayload \u003d \"START\"\n\t\n\tsystem.cirruslink.transmission.publish(\"mosquitto_local\", topic, payload.encode(\"utf-8\"), 0, False)"
+                  },
+                  "scope": "G",
+                  "type": "script"
+                }
+              }
+            },
+            "meta": {
+              "name": "BtnStart"
+            },
+            "position": {
+              "basis": "34px",
+              "grow": 1
+            },
+            "props": {
+              "style": {
+                "backgroundColor": "#2DFF00"
+              },
+              "text": "Start"
+            },
+            "type": "ia.input.button"
+          },
+          {
+            "events": {
+              "component": {
+                "onActionPerformed": {
+                  "config": {
+                    "script": "\t# Pobranie parametrów z widoku\n\tenterprise \u003d self.view.params.Enterprise\n\tsite \u003d self.view.params.Site\n\tarea \u003d self.view.params.Area\n\tline \u003d self.view.params.NrLine\n\tplc \u003d self.view.params.NrPLC\n\t\n\t# Dynamiczne złożenie ścieżki tematu\n\ttopic \u003d \"{}/{}/{}/Line{}/PLC{}/Cmd\".format(enterprise, site, area, line, plc)\n\tpayload \u003d \"STOP\"\n\t\n\tsystem.cirruslink.transmission.publish(\"mosquitto_local\", topic, payload.encode(\"utf-8\"), 0, False)"
+                  },
+                  "scope": "G",
+                  "type": "script"
+                }
+              }
+            },
+            "meta": {
+              "name": "BtnStop"
+            },
+            "position": {
+              "basis": "34px",
+              "grow": 1
+            },
+            "props": {
+              "style": {
+                "backgroundColor": "#FF0013"
+              },
+              "text": "Stop"
+            },
+            "type": "ia.input.button"
+          }
+        ],
+        "meta": {
+          "name": "FlexContainer"
+        },
+        "position": {
+          "basis": "200px",
+          "grow": 1
+        },
+        "props": {
+          "style": {
+            "gap": "15px",
+            "width": "100%"
+          }
+        },
+        "type": "ia.container.flex"
+      }
+    ],
+    "meta": {
+      "name": "root"
+    },
+    "props": {
+      "alignContent": "space-around",
+      "alignItems": "center",
+      "direction": "column",
+      "style": {
+        "backgroundColor": "#0f172a",
+        "borderColor": "#334155",
+        "borderRadius": "16px",
+        "borderStyle": "solid",
+        "borderWidth": "1px",
+        "boxShadow": "0 10px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.5)",
+        "padding": "20px"
+      }
+    },
+    "type": "ia.container.flex"
+  }
+}

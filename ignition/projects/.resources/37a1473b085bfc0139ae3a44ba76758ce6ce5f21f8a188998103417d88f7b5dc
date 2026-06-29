@@ -1,0 +1,10 @@
+{
+  "pages": {
+    "/": {
+      "viewPath": "DashBorad"
+    }
+  },
+  "sharedDocks": {
+    "cornerPriority": "top-bottom"
+  }
+}

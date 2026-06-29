@@ -1,0 +1,54 @@
+{
+  "custom": {},
+  "params": {},
+  "props": {},
+  "root": {
+    "children": [
+      {
+        "meta": {
+          "name": "AssemblyPLC_Faceplate"
+        },
+        "position": {
+          "basis": "320px"
+        },
+        "props": {
+          "params": {
+            "Area": "Assembly",
+            "Enterprise": "NovaTech",
+            "NrLine": 1,
+            "NrPLC": 1,
+            "Site": "Warsaw"
+          },
+          "path": "AssemblyPLC_Faceplate"
+        },
+        "type": "ia.display.view"
+      },
+      {
+        "meta": {
+          "name": "AssemblyPLC_Faceplate_0"
+        },
+        "position": {
+          "basis": "320px"
+        },
+        "props": {
+          "params": {
+            "Area": "Assembly",
+            "Enterprise": "NovaTech",
+            "NrLine": 2,
+            "NrPLC": 1,
+            "Site": "Warsaw"
+          },
+          "path": "AssemblyPLC_Faceplate"
+        },
+        "type": "ia.display.view"
+      }
+    ],
+    "meta": {
+      "name": "root"
+    },
+    "props": {
+      "direction": "column"
+    },
+    "type": "ia.container.flex"
+  }
+}

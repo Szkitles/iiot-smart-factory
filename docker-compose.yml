@@ -1,0 +1,69 @@
+
+services:
+    mosquitto:
+        image: eclipse-mosquitto:2.0.18
+        container_name: mosquitto-uns
+        ports:
+            - "1883:1883" # Standard MQTT port for PLCs and Ignition
+            - "9001:9001" # WebSockets port for Unity WebGL
+        volumes:
+            - ./mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf
+    postgres-local:
+        image: postgres:15-alpine
+        container_name: postgres-local
+        ports:
+            - "5432:5432" #Standard PostrageSQL port
+        environment:
+            POSTGRES_USER: ${DB_USER}
+            POSTGRES_PASSWORD:  ${DB_PASSWORD}
+            POSTGRES_DB: ${DB_NAME}
+        volumes:
+            - postgres_local_data:/var/lib/postgresql/data 
+    postgres-cloud:
+        image: postgres:15-alpine
+        container_name: postgres-cloud
+        ports:
+            - "5433:5432" # Mapped o 5433 on host to avoid port conflict
+        environment:
+            POSTGRES_USER: ${CLOUD_DB_USER}
+            POSTGRES_PASSWORD: ${CLOUD_DB_PASSWORD}
+            POSTGRES_DB: ${CLOUD_DB_NAME}
+        volumes:
+            - postgres_cloud_data:/var/lib/postgresql/data      
+    ignition:
+        image: inductiveautomation/ignition:8.1.33
+        container_name: ignition-gateway
+        ports:
+            - "8085:8088" # Web interface port
+            - "8043:8043" # Secure web interface port
+        environment:
+            ACCEPT_EULA: "Y"
+            GATEWAY_ADMIN_PASSWORDL: ${IGNITION_PASSWORD}
+        volumes:
+            - ignition_data:/usr/local/bin/ignition/data
+            - ignition_user_lib:/usr/local/bin/ignition/user-lib
+            - ./ignition/projects:/usr/local/bin/ignition/data/projects
+            - ./ignition/db/config.idb:/usr/local/bin/ignition/data/db/config.idb
+    novatech-warsaw-assembly-line1-plc1:
+        image: martinkellers/codesys:3.5.17
+        container_name: novatech-warsaw-assembly-line1-plc1
+        ports:
+            - "11740:11740" # Codesys IDE programing port for PLC 1
+        volumes:
+            - codesys_data_plc1:/var/opt/codesys
+            - ./Codesys/plc1_logic:/var/opt/codesys/PlcLogic
+    novatech-warsaw-assembly-line1-plc2:
+        image: martinkellers/codesys:3.5.17
+        container_name: novatech-warsaw-assembly-line1-plc2
+        ports:
+            - "11741:11740" # Codesys IDE programing port for PLC 2
+        volumes:
+            - codesys_data_plc2:/var/opt/codesys
+            - ./Codesys/plc2_logic:/var/opt/codesys/PlcLogic
+volumes:
+    postgres_local_data:
+    postgres_cloud_data:
+    ignition_data:
+    ignition_user_lib:
+    codesys_data_plc1: # Volume for PLC 1
+    codesys_data_plc2: # Volume for PLC 2
