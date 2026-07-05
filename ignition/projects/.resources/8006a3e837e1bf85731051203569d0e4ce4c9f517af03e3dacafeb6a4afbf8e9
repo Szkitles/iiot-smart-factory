@@ -1,0 +1,210 @@
+{
+  "custom": {},
+  "params": {},
+  "props": {
+    "defaultSize": {
+      "width": 280
+    }
+  },
+  "root": {
+    "children": [
+      {
+        "meta": {
+          "name": "btn_01_Dashboard"
+        },
+        "position": {
+          "shrink": 0
+        },
+        "propConfig": {
+          "props.style.classes": {
+            "binding": {
+              "config": {
+                "expression": "if({session.custom.activePage} \u003d 1, \"psc-NavItem-Active\", \"psc-NavItem\")"
+              },
+              "type": "expr"
+            }
+          }
+        },
+        "props": {
+          "image": {
+            "height": 20,
+            "icon": {
+              "path": "material/dashboard"
+            },
+            "width": 20
+          },
+          "primary": false,
+          "style": {},
+          "text": "Dashboard"
+        },
+        "type": "ia.input.button"
+      },
+      {
+        "meta": {
+          "name": "btn_02_DigitalTwin"
+        },
+        "position": {
+          "shrink": 0
+        },
+        "propConfig": {
+          "props.style.classes": {
+            "binding": {
+              "config": {
+                "expression": "if({session.custom.activePage} \u003d 2, \"psc-NavItem psc-NavItem-Active\", \"psc-NavItem\")"
+              },
+              "type": "expr"
+            }
+          }
+        },
+        "props": {
+          "image": {
+            "height": 20,
+            "icon": {
+              "path": "material/device_hub"
+            },
+            "width": 20
+          },
+          "primary": false,
+          "style": {},
+          "text": "Digital Twin"
+        },
+        "type": "ia.input.button"
+      },
+      {
+        "meta": {
+          "name": "btn_03_Operations"
+        },
+        "position": {
+          "shrink": 0
+        },
+        "propConfig": {
+          "props.style.classes": {
+            "binding": {
+              "config": {
+                "expression": "if({session.custom.activePage} \u003d 3, \"psc-NavItem psc-NavItem-Active\", \"psc-NavItem\")"
+              },
+              "type": "expr"
+            }
+          }
+        },
+        "props": {
+          "image": {
+            "height": 20,
+            "icon": {
+              "path": "material/chrome_reader_mode"
+            },
+            "width": 20
+          },
+          "primary": false,
+          "style": {},
+          "text": "Operations"
+        },
+        "type": "ia.input.button"
+      },
+      {
+        "meta": {
+          "name": "btn_04_Alarms"
+        },
+        "position": {
+          "shrink": 0
+        },
+        "propConfig": {
+          "props.style.classes": {
+            "binding": {
+              "config": {
+                "expression": "if({session.custom.activePage} \u003d 4, \"psc-NavItem psc-NavItem-Active\", \"psc-NavItem\")"
+              },
+              "type": "expr"
+            }
+          }
+        },
+        "props": {
+          "image": {
+            "height": 20,
+            "icon": {
+              "path": "material/notifications_active"
+            },
+            "width": 20
+          },
+          "primary": false,
+          "style": {},
+          "text": "Alarms"
+        },
+        "type": "ia.input.button"
+      },
+      {
+        "meta": {
+          "name": "btn_05_Statistics"
+        },
+        "position": {
+          "shrink": 0
+        },
+        "propConfig": {
+          "props.style.classes": {
+            "binding": {
+              "config": {
+                "expression": "if({session.custom.activePage} \u003d 5, \"psc-NavItem psc-NavItem-Active\", \"psc-NavItem\")"
+              },
+              "type": "expr"
+            }
+          }
+        },
+        "props": {
+          "image": {
+            "height": 20,
+            "icon": {
+              "path": "material/bar_chart"
+            },
+            "width": 20
+          },
+          "primary": false,
+          "style": {},
+          "text": "Statistics"
+        },
+        "type": "ia.input.button"
+      },
+      {
+        "meta": {
+          "name": "btn_06_Diagnostics"
+        },
+        "position": {
+          "shrink": 0
+        },
+        "propConfig": {
+          "props.style.classes": {
+            "binding": {
+              "config": {
+                "expression": "if({session.custom.activePage} \u003d 6, \"psc-NavItem psc-NavItem-Active\", \"psc-NavItem\")"
+              },
+              "type": "expr"
+            }
+          }
+        },
+        "props": {
+          "image": {
+            "height": 20,
+            "icon": {
+              "path": "material/build"
+            },
+            "width": 20
+          },
+          "primary": false,
+          "style": {},
+          "text": "Diagnostics"
+        },
+        "type": "ia.input.button"
+      }
+    ],
+    "meta": {
+      "name": "root"
+    },
+    "props": {
+      "alignContent": "flex-start",
+      "direction": "column",
+      "style": {
+        "classes": "psc-Sidebar"
+      }
+    },
+    "type": "ia.container.flex"
+  }
+}

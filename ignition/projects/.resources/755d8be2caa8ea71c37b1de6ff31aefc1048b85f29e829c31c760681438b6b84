@@ -1,0 +1,145 @@
+/* ==========================================================================
+   SMART FACTORY 4.0 - ADVANCED DESIGN SYSTEM (LIGHT & DARK THEMES)
+   ========================================================================== */
+
+/* --- 1. DEFAULT / LIGHT THEME VARIABLES --- */
+:root, [data-theme="light"] {
+    /* Backgrounds */
+    --app-bg-color: #f1f5f9;           
+    --card-bg-color: #ffffff;          
+    --card-bg-hover: #f8fafc;          
+    --sidebar-bg-color: #e2e8f0;       
+    --header-bg-color: #ffffff;        
+    
+    /* Text */
+    --text-primary: #0f172a;           
+    --text-secondary: #64748b;         
+    
+    /* Accents - Classic Blue in Light Mode */
+    --accent-primary: #0284c7;         
+    --accent-glow: rgba(2, 132, 199, 0.3);
+    
+    /* Statuses */
+    --status-running: #16a34a;         
+    --status-stopped: #dc2626;         
+    --status-warning: #ca8a04;         
+    --status-inactive: #94a3b8;        
+    
+    /* Shadows & Radii */
+    --shadow-card: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    --shadow-header: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+    --radius-md: 8px;
+    --radius-lg: 16px;
+}
+
+/* --- 2. DARK THEME OVERRIDES --- */
+[data-theme="dark"] {
+    /* Backgrounds - Modern Industrial Dark */
+    --app-bg-color: #1e2124;           /* Deep Graphite Main Background */
+    --card-bg-color: #2b2d31;          /* Slightly lighter card background */
+    --card-bg-hover: #313338;          /* Card hover state */
+    --sidebar-bg-color: #111214;       /* Very dark left sidebar */
+    --header-bg-color: #2b2d31;        /* Header matching cards */
+    
+    /* Text */
+    --text-primary: #f2f3f5;           /* Bright text */
+    --text-secondary: #b5bac1;         /* Muted text for labels */
+    
+    /* Accents - Emerald Green */
+    --accent-primary: #10B981;         /* Vibrant Emerald Green */
+    --accent-glow: rgba(16, 185, 129, 0.4);
+    
+    /* Statuses */
+    --status-running: #00E676;         /* Bright Green */
+    --status-stopped: #FF1744;         /* Bright Red */
+    --status-warning: #FFEA00;         /* Bright Yellow */
+    --status-inactive: #4f545c;        /* Grayed out */
+    
+    /* Shadows */
+    --shadow-card: 0 8px 16px rgba(0, 0, 0, 0.4);
+    --shadow-header: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+/* ==========================================================================
+   PERSPECTIVE STYLE CLASSES (Use in Component 'classes' prop)
+   ========================================================================== */
+
+/* --- Layout Components --- */
+.psc-Sidebar {
+    background-color: var(--sidebar-bg-color) !important;
+    border-right: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.psc-Header {
+    background-color: var(--header-bg-color) !important;
+    box-shadow: var(--shadow-header);
+    z-index: 100;
+}
+
+/* --- Navigation Items (Minimalist Green Style) --- */
+.psc-NavItem {
+    color: var(--text-secondary) !important;
+    border-radius: var(--radius-md); /* Normal clean rectangle with 8px rounded corners */
+    transition: all 0.25s ease-in-out;
+    cursor: pointer;
+    padding: 10px 15px;
+    margin: 4px 8px;
+    background-color: transparent !important; /* Transparent background by default */
+    border-left: 4px solid transparent !important; /* Pre-allocated border to prevent text shift */
+}
+
+/* Hover: Text and icon turn green, background stays transparent */
+.psc-NavItem:hover {
+    color: var(--accent-primary) !important;
+    background-color: transparent !important;
+}
+
+/* Active: Green left accent line, green text, and very subtle 5% background tint */
+.psc-NavItem-Active {
+    color: var(--accent-primary) !important;
+    border-left: 4px solid var(--accent-primary) !important;
+    background-color: rgba(16, 185, 129, 0.05) !important; 
+}
+
+/* --- Cards & Panels --- */
+.psc-MachineCard {
+    background-color: var(--card-bg-color) !important;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    transition: all 0.3s ease-in-out;
+}
+
+.psc-MachineCard:hover {
+    background-color: var(--card-bg-hover) !important;
+}
+
+.psc-CardTitle {
+    color: var(--text-primary) !important;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+/* --- Buttons --- */
+.psc-NeonButton {
+    background-color: transparent !important;
+    color: var(--accent-primary) !important;
+    border: 2px solid var(--accent-primary) !important;
+    border-radius: var(--radius-md);
+    font-weight: bold;
+    transition: all 0.2s ease-in-out;
+}
+
+.psc-NeonButton:hover {
+    background-color: var(--accent-primary) !important;
+    color: #000000 !important; /* High contrast text on hover */
+    box-shadow: var(--shadow-neon);
+}
+
+/* --- Alarms --- */
+.psc-AlarmBanner {
+    background-color: var(--status-stopped) !important;
+    color: #ffffff !important;
+    font-weight: bold;
+    box-shadow: 0 -4px 10px rgba(255, 23, 68, 0.3);
+}

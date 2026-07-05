@@ -19,7 +19,7 @@
             "NrPLC": 1,
             "Site": "Warsaw"
           },
-          "path": "AssemblyPLC_Faceplate"
+          "path": "Templates/AssemblyPLC_Faceplate"
         },
         "type": "ia.display.view"
       },
@@ -38,7 +38,7 @@
             "NrPLC": 1,
             "Site": "Warsaw"
           },
-          "path": "AssemblyPLC_Faceplate"
+          "path": "Templates/AssemblyPLC_Faceplate"
         },
         "type": "ia.display.view"
       }
