@@ -48,7 +48,7 @@ services:
             - ignition_data:/usr/local/bin/ignition/data
             - ignition_user_lib:/usr/local/bin/ignition/user-lib
             - ./ignition/projects:/usr/local/bin/ignition/data/projects
-            - ./ignition/db/config.idb:/usr/local/bin/ignition/data/db/config.idb
+            - ./ignition/db:/usr/local/bin/ignition/data/db
     novatech-warsaw-assembly-line1-plc1:
         restart: unless-stopped
         image: martinkellers/codesys:3.5.17
