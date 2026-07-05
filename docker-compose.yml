@@ -1,6 +1,7 @@
 
 services:
     mosquitto:
+        restart: unless-stopped
         image: eclipse-mosquitto:2.0.18
         container_name: mosquitto-uns
         ports:
@@ -9,6 +10,7 @@ services:
         volumes:
             - ./mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf
     postgres-local:
+        restart: unless-stopped
         image: postgres:15-alpine
         container_name: postgres-local
         ports:
@@ -20,6 +22,7 @@ services:
         volumes:
             - postgres_local_data:/var/lib/postgresql/data 
     postgres-cloud:
+        restart: unless-stopped
         image: postgres:15-alpine
         container_name: postgres-cloud
         ports:
@@ -31,6 +34,7 @@ services:
         volumes:
             - postgres_cloud_data:/var/lib/postgresql/data      
     ignition:
+        restart: unless-stopped
         image: inductiveautomation/ignition:8.1.33
         container_name: ignition-gateway
         ports:
@@ -45,6 +49,7 @@ services:
             - ./ignition/projects:/usr/local/bin/ignition/data/projects
             - ./ignition/db/config.idb:/usr/local/bin/ignition/data/db/config.idb
     novatech-warsaw-assembly-line1-plc1:
+        restart: unless-stopped
         image: martinkellers/codesys:3.5.17
         container_name: novatech-warsaw-assembly-line1-plc1
         ports:
@@ -53,6 +58,7 @@ services:
             - codesys_data_plc1:/var/opt/codesys
             - ./Codesys/plc1_logic:/var/opt/codesys/PlcLogic
     novatech-warsaw-assembly-line1-plc2:
+        restart: unless-stopped
         image: martinkellers/codesys:3.5.17
         container_name: novatech-warsaw-assembly-line1-plc2
         ports:

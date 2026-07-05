@@ -1,6 +1,5 @@
 name: Deploy IIoT Stack to VPS
 
-# Potok uruchamia się automatycznie przy każdym 'git push' na gałąź 'master' (lub 'main')
 on:
   push:
     branches:
@@ -8,31 +7,48 @@ on:
       - main
 
 jobs:
-  deploy:
+  # Zadanie 1: Walidacja składni i konfiguracji (CI)
+  validate:
     runs-on: ubuntu-22.04
-
     steps:
-      # Krok 1: Pobranie najnowszego kodu z GitHuba na maszynę wirtualną GitHub Actions
       - name: Checkout Code
         uses: actions/checkout@v3
 
-      # Krok 2: Połączenie przez SSH z Twoim serwerem VPS i wdrożenie projektu
+      - name: Create Mock .env
+        run: cp .env.example .env
+
+      - name: Validate Docker Compose Syntax
+        run: docker compose config
+
+  # Zadanie 2: Wdrożenie na serwer VPS (CD) - uruchamia się tylko, gdy validate zakończy się sukcesem
+  deploy:
+    runs-on: ubuntu-22.04
+    needs: validate
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
       - name: Deploy to VPS via SSH
         uses: appleboy/ssh-action@master
+        env:
+          ENV_FILE: ${{ secrets.ENV_FILE }}
         with:
-          host: ${{ secrets.VPS_IP }}          # Adres IP Twojego serwera (ustawiany w GitHub Secrets)
-          username: ${{ secrets.VPS_USER }}    # Nazwa użytkownika, np. root (ustawiana w GitHub Secrets)
-          key: ${{ secrets.VPS_SSH_KEY }}      # Twój prywatny klucz SSH (ustawiany w GitHub Secrets)
+          host: ${{ secrets.VPS_IP }}          # Adres IP serwera
+          username: ${{ secrets.VPS_USER }}    # Nazwa użytkownika
+          key: ${{ secrets.VPS_SSH_KEY }}      # Prywatny klucz SSH
           port: 22
+          envs: ENV_FILE
           script: |
-            # 1. Wejdź do katalogu projektu na serwerze (zmień ścieżkę jeśli będzie inna)
             cd ~/iiot-smart-factory
             
-            # 2. Pobierz najnowsze zmiany z repozytorium Git
-            git pull origin master
+            # Pobranie najnowszego kodu z repozytorium
+            git pull
             
-            # 3. Zrestartuj i przebuduj kontenery w tle
+            # Dynamiczne odtworzenie pliku .env z sekretu GitHub
+            echo "$ENV_FILE" > .env
+            
+            # Restart i przebudowa kontenerów w tle
             docker-compose down
             docker-compose up -d --build
             
-            echo "Deployment completed successfully!"
+            echo "Deployment completed successfully!"

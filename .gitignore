@@ -1,5 +1,5 @@
 # Secrets
-
+.env
 
 # Codesys compilation and user settings
 Codesys/*.opt
