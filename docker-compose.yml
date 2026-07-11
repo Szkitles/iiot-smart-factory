@@ -5,6 +5,7 @@ services:
         restart: unless-stopped
         image: eclipse-mosquitto:2.0.18
         container_name: mosquitto-uns
+        mem_limit: 32m
         ports:
             - "1883:1883" # Standard MQTT port for PLCs and Ignition
             - "9001:9001" # WebSockets port for Unity WebGL
@@ -14,6 +15,7 @@ services:
         restart: unless-stopped
         image: postgres:15-alpine
         container_name: postgres-local
+        mem_limit: 128m
         ports:
             - "5432:5432" #Standard PostrageSQL port
         environment:
@@ -26,6 +28,7 @@ services:
         restart: unless-stopped
         image: postgres:15-alpine
         container_name: postgres-cloud
+        mem_limit: 128m
         ports:
             - "5433:5432" # Mapped o 5433 on host to avoid port conflict
         environment:
@@ -38,12 +41,15 @@ services:
         restart: unless-stopped
         image: inductiveautomation/ignition:8.1.33
         container_name: ignition-gateway
+        mem_limit: 512m
         ports:
             - "8085:8088" # Web interface port
             - "8043:8043" # Secure web interface port
         environment:
             ACCEPT_EULA: "Y"
             GATEWAY_ADMIN_PASSWORDL: ${IGNITION_PASSWORD}
+            GATEWAY_MAX_MEMORY: 384
+            GATEWAY_INIT_MEMORY: 256
         volumes:
             - ignition_data:/usr/local/bin/ignition/data
             - ignition_user_lib:/usr/local/bin/ignition/user-lib
@@ -53,6 +59,7 @@ services:
         restart: unless-stopped
         image: martinkellers/codesys:3.5.17
         container_name: novatech-warsaw-assembly-line1-plc1
+        mem_limit: 128m
         ports:
             - "11740:11740" # Codesys IDE programing port for PLC 1
         volumes:
@@ -62,6 +69,7 @@ services:
         restart: unless-stopped
         image: martinkellers/codesys:3.5.17
         container_name: novatech-warsaw-assembly-line1-plc2
+        mem_limit: 128m
         ports:
             - "11741:11740" # Codesys IDE programing port for PLC 2
         volumes:
