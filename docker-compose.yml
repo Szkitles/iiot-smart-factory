@@ -11,6 +11,8 @@ services:
             - "9001:9001" # WebSockets port for Unity WebGL
         volumes:
             - ./mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf
+            - mosquitto_data:/mosquitto/data
+            - mosquitto_log:/mosquitto/log
     postgres-local:
         restart: unless-stopped
         image: postgres:15-alpine
@@ -98,3 +100,5 @@ volumes:
     ignition_user_lib:
     codesys_data_plc1: # Volume for PLC 1
     codesys_data_plc2: # Volume for PLC 2
+    mosquitto_data:
+    mosquitto_log:

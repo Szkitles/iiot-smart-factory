@@ -24,3 +24,6 @@ ignition/projects/conversion-report.txt
 esp32/src/config.h
 esp32/.pio/
 
+# SSH keys
+*.key
+*.pem
