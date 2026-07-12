@@ -19,6 +19,16 @@ graph TD
         Broker[Mosquitto MQTT Broker: UNS Hub]
         SCADA[Ignition SCADA: Perspective]
         DB_Local[(PostgreSQL Local DB: Staging)]
+        PythonBridge[Python Azure-Mosquitto Bridge]
+    end
+
+    subgraph Microsoft Azure Cloud
+        IoTHub[Azure IoT Hub]
+        EventHub[Event Hubs Built-in Endpoint]
+    end
+
+    subgraph Edge Layer
+        ESP32[ESP32 Edge AI Device: TinyML Vibration Anomaly Detection]
     end
 
     subgraph Cloud / External
@@ -27,6 +37,11 @@ graph TD
     end
 
     %% Communication paths
+    ESP32 -->|MQTT + SAS Token| IoTHub
+    IoTHub -->|Message Routing| EventHub
+    EventHub -->|AMQP / azure-eventhub| PythonBridge
+    PythonBridge -->|MQTT / paho-mqtt| Broker
+    
     PLC1 <-->|MQTT: Telemetry & Commands| Broker
     PLC2 <-->|MQTT: Telemetry & Commands| Broker
     Broker <-->|MQTT: UNS Client| SCADA
@@ -72,12 +87,29 @@ graph TD
 - **Current Status [IN PROGRESS]**:
   - `postgres-local` (port 5432) and `postgres-cloud` (port 5433) containers are running. History logging to be configured during SCADA scaling.
 
-### 5. Digital Twin (Unity WebGL / RealVirtual)
+### 5. Edge AI Vibration Monitor (ESP32 Node)
+- **Scope**: Physical hardware node placed at the machine level to execute localized machine learning.
+- **Features**: 
+  - Runs a compiled **TinyML anomaly detection model** evaluating accelerometer data in real-time.
+  - Communicates directly to the cloud via **Azure IoT Hub** over MQTT using secure SAS Token credentials.
+- **Current Status [NEW / IN PROGRESS]**:
+  - TinyML model successfully loaded to the ESP32. Integration with Azure IoT Hub active.
+
+### 6. Azure-to-Local Bridge (Python Microservice)
+- **Scope**: Serves as a secure, containerized OT-IT bridge between Microsoft Azure Cloud and the local UNS.
+- **Features**:
+  - Runs in an isolated Docker container on the Oracle server.
+  - Uses `azure-eventhub` and `paho-mqtt` Python libraries to consume stream payloads from Azure Event Hubs and republish them to the local Mosquitto broker under `NovaTech/Warsaw/Assembly/Line1/EdgeAI/Anomaly`.
+  - **Security isolation**: Isolates the SCADA system (`ignition-gateway`) in the local docker network; Ignition has no direct internet access, while the Python bridge handles all external authentication and connection tasks.
+- **Current Status [NEW / IN PROGRESS]**:
+  - Docker service defined and script testing initiated.
+
+### 7. Digital Twin (Unity WebGL / RealVirtual)
 - **Scope**: A simple 3D simulation of the assembly cell compiled to WebGL. It connects to the Mosquitto Websocket port (`9001`) and moves in sync with the MQTT status payloads.
 - **Current Status [PLANNED]**:
   - Unity project to be created and linked to `NovaTech/#` topics.
 
-### 6. Mendix App (Low-Code Portal)
+### 8. Mendix App (Low-Code Portal)
 - **Scope**: Enterprise level low-code dashboard to check order status and interact with the databases, utilizing MQTT for UNS compatibility.
 - **Current Status [PLANNED]**:
   - To be evaluated based on timeline.

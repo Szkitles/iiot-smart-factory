@@ -42,11 +42,15 @@ jobs:
             set -e
             cd ~/iiot-smart-factory
             
+            # Fix permissions first so the deploy user can modify/delete files created by Docker containers
+            sudo chmod -R 777 ~/iiot-smart-factory
+            
+            # Discard any local runtime modifications (e.g. database updates, logs, cache)
+            git reset --hard HEAD
+            git clean -fd
+            
             # Pobranie najnowszego kodu z repozytorium
             git pull
-            
-            # Automatyczne naprawienie uprawnień dla Ignition po pobraniu nowych plików
-            sudo chmod -R 777 ~/iiot-smart-factory/ignition
             
             # Dynamiczne odtworzenie pliku .env z sekretu GitHub
             echo "$ENV_FILE" > .env

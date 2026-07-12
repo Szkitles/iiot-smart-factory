@@ -41,15 +41,15 @@ services:
         restart: unless-stopped
         image: inductiveautomation/ignition:8.1.33
         container_name: ignition-gateway
-        mem_limit: 512m
+        mem_limit: 2048m
         ports:
             - "8085:8088" # Web interface port
             - "8043:8043" # Secure web interface port
         environment:
             ACCEPT_EULA: "Y"
             GATEWAY_ADMIN_PASSWORDL: ${IGNITION_PASSWORD}
-            GATEWAY_MAX_MEMORY: 384
-            GATEWAY_INIT_MEMORY: 256
+            GATEWAY_MAX_MEMORY: 1536
+            GATEWAY_INIT_MEMORY: 512
         volumes:
             - ignition_data:/usr/local/bin/ignition/data
             - ignition_user_lib:/usr/local/bin/ignition/user-lib
@@ -75,6 +75,22 @@ services:
         volumes:
             - codesys_data_plc2:/var/opt/codesys
             - ./Codesys/plc2_logic:/var/opt/codesys/PlcLogic
+    azure-bridge:
+        restart: unless-stopped
+        build:
+            context: ./azure-bridge
+            dockerfile: Dockerfile
+        container_name: azure-bridge
+        mem_limit: 64m
+        environment:
+            - AZURE_EVENTHUB_CONNECTION_STRING=${AZURE_EVENTHUB_CONNECTION_STRING}
+            - AZURE_EVENTHUB_NAME=${AZURE_EVENTHUB_NAME}
+            - AZURE_EVENTHUB_CONSUMER_GROUP=${AZURE_EVENTHUB_CONSUMER_GROUP}
+            - MQTT_BROKER=mosquitto
+            - MQTT_PORT=1883
+            - MQTT_TOPIC=NovaTech/Warsaw/Assembly/Line1/EdgeAI/Anomaly
+        depends_on:
+            - mosquitto
 volumes:
     postgres_local_data:
     postgres_cloud_data:

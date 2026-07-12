@@ -19,3 +19,8 @@ Desktop.ini
 
 # Ignition temporary / lock files (if any occur locally)
 ignition/projects/conversion-report.txt
+
+# ESP32 settings and build files
+esp32/src/config.h
+esp32/.pio/
+

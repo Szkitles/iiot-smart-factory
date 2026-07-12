@@ -1,0 +1,32 @@
+{
+  "base": {
+    "style": {
+      "backgroundColor": "#1e2030",
+      "borderColor": "#3a3d4e",
+      "borderWidth": "1px",
+      "borderTopLeftRadius": "9999px",
+      "borderTopRightRadius": "9999px",
+      "borderBottomLeftRadius": "9999px",
+      "borderBottomRightRadius": "9999px",
+      "margin": "6px",
+      "padding": "12px 24px"
+    }
+  },
+  "variants": [
+    {
+      "pseudo": "hover",
+      "style": {
+        "backgroundColor": "#2e3147",
+        "borderColor": "#5c6080"
+      }
+    },
+    {
+      "pseudo": "active",
+      "style": {
+        "backgroundColor": "#0d2e22",
+        "borderColor": "#10B981",
+        "color": "#10B981"
+      }
+    }
+  ]
+}

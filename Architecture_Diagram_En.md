@@ -1,6 +1,10 @@
 # Smart Factory 4.0 - Architecture Diagram
 
-Below is the comprehensive architecture diagram. Mendix has been restored as the central Business Application (IT layer), while Ignition acts as the factory-floor SCADA (OT layer). The mobile HMI for Ignition has been removed.
+Below is the comprehensive architecture diagram. Mendix acts as the business application (IT layer), Ignition acts as the local SCADA (OT layer), and we have integrated a new secure **Edge-Cloud OT-IT Bridge** featuring a physical ESP32 (running TinyML) and Microsoft Azure.
+
+---
+
+## System Architecture Diagram
 
 ```mermaid
 graph TD
@@ -12,6 +16,9 @@ graph TD
     classDef db fill:#d9d9d9,stroke:#333,stroke-width:2px,color:black;
     classDef app fill:#c299ff,stroke:#333,stroke-width:2px,color:black;
     classDef cicd fill:#ffdb58,stroke:#333,stroke-width:2px,color:black;
+    classDef azure fill:#0078d4,stroke:#333,stroke-width:2px,color:white;
+    classDef python fill:#ffd43b,stroke:#333,stroke-width:2px,color:black;
+    classDef edge fill:#e06666,stroke:#333,stroke-width:2px,color:white;
 
     %% CI/CD Section
     subgraph "CI/CD PIPELINE (e.g., GitHub Actions)"
@@ -27,6 +34,22 @@ graph TD
     subgraph "01. EDGE & DATA SOURCES"
         Codesys1["Virtual PLC Codesys (Line 1)<br>(Docker)"]:::plc
         CodesysN["Virtual PLC Codesys (Line N)<br>(Docker)"]:::plc
+    end
+
+    %% Edge AI Node (Physical)
+    subgraph "01a. EDGE AI MONITORING"
+        ESP32["ESP32 Microcontroller (TinyML)<br>Vibration Anomaly Detection"]:::edge
+    end
+
+    %% Azure Cloud IoT Layer
+    subgraph "02a. MICROSOFT AZURE CLOUD"
+        IoTHub["Azure IoT Hub<br>(MQTT + SAS Authentication)"]:::azure
+        EventHubs["Event Hubs Endpoint<br>(Built-in Message Routing)"]:::azure
+    end
+
+    %% Local Bridge Container
+    subgraph "02b. SECURE OT-IT DATA BRIDGE"
+        PythonBridge["Python Microservice Container<br>(azure-eventhub & paho-mqtt)"]:::python
     end
 
     %% Database Layer
@@ -55,6 +78,12 @@ graph TD
     Codesys1 ---|"MQTT (TCP:1883)<br>Pub Telemetry / Sub Commands"| Mosquitto
     CodesysN ---|"MQTT (TCP:1883)<br>Pub Telemetry / Sub Commands"| Mosquitto
 
+    %% Edge AI to Azure Flow
+    ESP32 --->|"MQTT / TLS (TCP:8883)<br>Pub Predictions (SAS Token)"| IoTHub
+    IoTHub --->|"Internal Route"| EventHubs
+    EventHubs ===|"AMQP / TLS (TCP:5671)<br>Read Stream (Azure SDK)"| PythonBridge
+    PythonBridge --->|"MQTT (TCP:1883)<br>Pub Anomaly Telemetry"| Mosquitto
+
     Ignition ---|"MQTT (TCP:1883)<br>Sub Telemetry / Pub Commands"| Mosquitto
     
     %% Orders Flow
@@ -72,6 +101,32 @@ graph TD
     Perspective -.-|"Embeds IFrame"| Unity
     Mendix -.-|"Embeds IFrame"| Unity
 ```
+
+---
+
+## Key Technical Highlights & Architecture Advantages
+
+### 1. Hybrid Edge-Cloud TinyML Processing
+Instead of streaming high-frequency, raw accelerometer vibration data to the cloud (which degrades bandwidth and increases latency/costs), we process the data at the **Edge**. 
+- The physical **ESP32 microcontroller** executes a compiled **TinyML classification model** locally.
+- Only the processed inference results (predictions, anomaly status, and confidence levels) are packaged as lightweight JSON and sent to Azure.
+
+### 2. High-Grade Security & Isolation of the OT Layer (Zero Trust)
+Industrial safety depends on strict network segmentation. Exposing a SCADA gateway (`ignition-gateway`) directly to the internet is a severe vulnerability. 
+- **The OT Layer is fully isolated:** The Ignition SCADA and local PLCs operate entirely within the internal, secure Docker bridge network. Ignition has no direct internet access and only communicates with the local Mosquitto broker.
+- **Python Security Shield:** A dedicated, custom **Python microservice** acts as the secure OT-IT gateway. It alone handles the external AMQP/TLS handshake and SAS Token credentials with Microsoft Azure. It consumes data from the cloud and forwards it internally, preventing any external entity from connecting directly to the factory network or the SCADA database.
+
+### 3. Containerized Data Transformation Pipeline
+The Python bridge is completely containerized within `docker-compose.yml`. This microservice-oriented design offers:
+- **Isolation & Portability:** Running the Python consumer script inside a Docker container ensures dependencies (like `azure-eventhub` and `paho-mqtt`) are completely self-contained.
+- **Resiliency & Auto-Healing:** Configured with `restart: unless-stopped` in Docker Compose, the bridge automatically recovers and reconnects if the network or Azure connection drops.
+
+### 4. Enterprise-Grade Cloud Ingestion (Microsoft Azure)
+The project showcases integration with industry-standard cloud frameworks:
+- **Azure IoT Hub:** Serves as the secure ingestion gateway for physical embedded hardware.
+- **Built-in Event Routing:** Azure Routes direct payloads to an Event Hubs endpoint, proving knowledge of scalable cloud architecture.
+
+---
 
 ### Why Mendix is Crucial (The IT/OT Split):
 1. **Sales & Workflow Management:** Ignition is great for machine control, but bad for multi-step human workflows (like credit checks, manager approvals). Mendix provides the perfect "Customer/Manager Portal" to process these orders before pushing them to the factory floor.
