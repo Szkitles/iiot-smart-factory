@@ -52,6 +52,9 @@ jobs:
             # Pobranie najnowszego kodu z repozytorium
             git pull
             
+            # Naprawa uprawnień dla nowych plików po pullu (szczególnie dla bazy danych)
+            sudo chmod -R 777 ~/iiot-smart-factory/ignition
+            
             # Dynamiczne odtworzenie pliku .env z sekretu GitHub
             echo "$ENV_FILE" > .env
             
