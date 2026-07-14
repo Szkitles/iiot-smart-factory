@@ -48,8 +48,9 @@ services:
             - "8085:8088" # Web interface port
             - "8043:8043" # Secure web interface port
         environment:
-            ACCEPT_EULA: "Y"
-            GATEWAY_ADMIN_PASSWORDL: ${IGNITION_PASSWORD}
+            ACCEPT_IGNITION_EULA: "Y"
+            GATEWAY_ADMIN_PASSWORD: ${IGNITION_PASSWORD}
+            IGNITION_MODULES: "mqtt-engine,mqtt-distributor,mqtt-transmission"
             GATEWAY_MAX_MEMORY: 1536
             GATEWAY_INIT_MEMORY: 512
         volumes:
